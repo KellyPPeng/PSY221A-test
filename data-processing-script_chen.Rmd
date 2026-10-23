@@ -186,15 +186,15 @@ compact_codebook(h2Data)
 
 ```{r save}
 #create data/processed_data if needed
-dir.create("processed_data",recursive=T,showWarnings=F)
+dir.create("data/processed_data",recursive=T,showWarnings=F)
 
 #save h1Data and h2Data without an extra row-number column
 write.csv(h1Data,"processed_data/practice_h1.csv",row.names=F)
 write.csv(h2Data,"processed_data/practice_h2.csv",row.names=F)
 
 #read the files back and confirm their dimensions
-h1Saved <- read.csv("processed_data/practice_h1.csv")
-h2Saved <- read.csv("processed_data/practice_h2.csv")
+h1Saved <- read.csv("data/processed_data/practice_h1.csv")
+h2Saved <- read.csv("data/processed_data/practice_h2.csv")
 dim(h1Saved)
 dim(h2Saved)
 

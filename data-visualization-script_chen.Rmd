@@ -19,8 +19,8 @@ library(ggrain)
 
 ```{r loadData}
 #load processed data
-h1Data <- read.csv("processed_data/practice_h1.csv")
-h2Data <- read.csv("processed_data/practice_h2.csv")
+h1Data <- read.csv("data/processed_data/practice_h1.csv")
+h2Data <- read.csv("data/processed_data/practice_h2.csv")
 
 #reorganize categorical variable
 table(h1Data$Sex_birth)
