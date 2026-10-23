@@ -1,0 +1,102 @@
+---
+title: "assign_2"
+author: "Chen Peng"
+date: "2026-10-23`"
+output: html_document
+---
+## Hypothesis
+
+H1: Sex at birth (categorical IV) may predict gender equality attitudes (composite variable). 
+H2: Intensity of love feelings (continuous) may negatively predict the willingness to marry without love (continuous).
+
+```{r load package}
+library(ggplot2)
+library(ggrain)
+
+```
+
+## Load the processed data
+
+```{r loadData}
+#load processed data
+h1Data <- read.csv("processed_data/practice_h1.csv")
+h2Data <- read.csv("processed_data/practice_h2.csv")
+
+#reorganize categorical variable
+table(h1Data$Sex_birth)
+h1Data$Sex_birth <- factor(h1Data$Sex_birth, levels=c("Male","Female","Intersex"))
+
+```
+
+## H1 - Box Plot
+
+```{r H1Box}
+#Box plot
+#The line is the median; the box covers the middle 50% of responses (Q1-Q3).
+#Whiskers reach the most extreme observations within 1.5 IQR of the box edges.
+h1box <- ggplot(data=h1Data,
+                aes(x=Sex_birth,
+                    y=gender_equa,
+                    fill=Sex_birth)) + 
+  geom_boxplot() + 
+  labs(x="sex assigned at birth",
+        y="Attitude about gender",
+        title="Attitude about gender by sex",
+       fill="Sex at birth") + 
+  theme_minimal(base_size=8)
+
+h1box
+
+
+
+```
+
+## H2 - Scatter Plots
+
+```{r H2Scatter}
+#Scatter Plot
+h2point <- ggplot(data=h2Data,
+                  aes(x=Love_how_much_1,
+                      y=Love_would_you_marry_1)) + 
+  geom_point() + 
+  labs(x="Intensity of love feelings",
+        y="Willingness to marry without love",
+        title="Willingness to marry without love by intensity of love feelings")+
+  theme_minimal(base_size=8)
+
+h2point
+
+#Jitter
+h2jitter <- ggplot(data=h2Data,
+                  aes(x=Love_how_much_1,
+                      y=Love_would_you_marry_1)) + 
+  geom_jitter(width=.12, height=.04,alpha=.04,size=.6) + 
+  labs(x="Intensity of love feelings",
+        y="Willingness to marry without love",
+        title="Willingness to marry without love by intensity of love feelings")+
+  theme_minimal(base_size=8)
+
+h2jitter
+
+
+```
+
+## H2 - Smooth Line
+
+```{r}
+#Scatter Plot with line
+h2line <- h2jitter + geom_smooth(method="lm")
+h2line
+
+```
+
+## Save figures
+
+```{r saveFigures}
+#Run after creating the plots. Save PNG files in the project's figures folder.
+dir.create("figures", showWarnings = FALSE)
+ggsave("figures/H1_figure_box.png",plot=h1box, width=10,height=6,dpi=300)
+
+ggsave("figures/H2_figure_line.png",plot=h2line, width=10,height=6,dpi=300)
+
+```

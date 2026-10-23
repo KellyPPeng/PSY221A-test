@@ -1,6 +1,0 @@
-"0","#generate the h1Data codebook"
-"0","compact_codebook(h1Data)"
-"2","Registered S3 method overwritten by 'rmdpartials':
-  method          from         
-  print.knit_asis tools:rstudio
-"

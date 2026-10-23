@@ -1,7 +1,0 @@
-"0","data$prefRange <-rowSums(
-  data[,prefVars] < 0 | data[,prefVars] > 30,
-  na.rm=TRUE
-) == FALSE
-"
-"2","Error: object 'prefVars' not found
-"

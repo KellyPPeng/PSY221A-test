@@ -1,4 +1,0 @@
-"0",""
-"0","#remove the known empty record with no ID, then check the row count"
-"0","data <- data[!is.na(data$ResponseId),]"
-"0",""
