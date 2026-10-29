@@ -16,6 +16,12 @@ H2: Intensity of love feelings (continuous) may negatively predict the willingne
 library(codebook)
 
 #load /raw/data_doctored.csv
+###JK: Include the data folder in the input path. ###
+# From the project folder, the file is inside data/raw, not raw.
+# Replace the read.csv() line below with:
+# raw <- read.csv("data/raw/data_doctored.csv")
+###  End of comment ###
+
 raw <- read.csv('./raw/data_doctored.csv')
 
 #check row and column counts, and inspect the first few rows
@@ -92,6 +98,14 @@ for(i in likert7){
   data[,i] <- as.numeric(ifelse(data[,i] %in% 1:7, data[,i], NA))
 }
 
+###JK: Reverse-code all three items before calculating the gender-equality mean. ###
+# These items express traditional gender roles, so higher original responses mean greater agreement with those roles, not greater support for gender equality.
+# The codebook specifies 8 - x for all three items: an original response of 7 becomes 1, and an original response of 1 becomes 7.
+# Your range and missing-value cleaning above works; add this line after that cleaning and before the mean calculation below:
+# data[, likert7] <- 8 - data[, likert7]
+# Then keep your rowMeans() calculation and rerun from the beginning to recreate and save H1 with the correct score direction.
+###  End of comment ###
+
 #calculate gender_equality as the mean of all three items
 #for NAs, conduct available item mean
 data$gender_equa <- rowMeans(data[,likert7], na.rm=TRUE)
@@ -134,6 +148,10 @@ table(h1Data$Sex_birth,useNA="ifany")
 range(h1Data$gender_equa)
 sum(duplicated(h1Data$ResponseId))
 
+###JK: The H2 variables both use 0-100 scales, not 1-7. ###
+# Your earlier range-check code correctly uses 0-100; please update the comment below to match it.
+###  End of comment ###
+
 #repeat the checks for h2Data; both scores should be within 1-7
 dim(h2Data)
 str(h2Data)
@@ -151,6 +169,16 @@ The descriptions come from the original codebook and our scoring decisions. `com
 ```{r variable_labels}
 #add a description to each h1Data column, in column order
 #include the source codes, meaning, and units
+
+###JK: Update the gender-equality label to describe the reversal and your available-item mean. ###
+# After adding the reversal above, you can replace the H1 label assignment below with:
+# var_label(h1Data) <- c(
+#   "Unique participant ID (ResponseId)",
+#   "Sex at birth: original codes 0=Male, 1=Female, 2=Intersex; stored as a factor.",
+#   "Gender equality: mean of available Gender_Equality_1-3 responses after reversing each item with 8 - x. At least one valid response is required. Scores range from 1 to 7; higher scores indicate greater support for gender equality."
+# )
+###  End of comment ###
+
 var_label(h1Data) <- c(
   "Unique participant ID (ResponseId)",
   "Sex at birth: original codes 0=Male, 1=Female, 2=Intersex; now stored as a factor",
@@ -169,6 +197,10 @@ var_label(h2Data) <- c(
 H1 includes participants with an ID, a valid sex-at-birth category, and six allocations between 0 and 30 that total 30. Factor level numbers in the generated table are internal R positions, not the original survey codes.
 
 ```{r h1_codebook}
+###JK: Please replace the H1 inclusion sentence above with a description of your own variables. ###
+# The sentence about six allocations totaling 30 comes from the example and does not describe your H1.
+###  End of comment ###
+
 #generate the h1Data codebook
 compact_codebook(h1Data)
 
@@ -177,6 +209,10 @@ compact_codebook(h1Data)
 H2 includes participants with an ID, relationship status 1, 2, or 3, and valid nonmissing qoa and at least one valid commitment response.
 
 ```{r h2_codebook}
+###JK: Please also replace the H2 inclusion sentence above. ###
+# Your H2 does not use qoa or commitment; those names are left over from the example.
+###  End of comment ###
+
 #generate the h2Data codebook
 compact_codebook(h2Data)
 
@@ -187,6 +223,14 @@ compact_codebook(h2Data)
 ```{r save}
 #create data/processed_data if needed
 dir.create("data/processed_data",recursive=T,showWarnings=F)
+
+###JK: Save into the same folder you created above and read from below. ###
+# You create data/processed_data, but the current write.csv() calls point to processed_data directly under the project folder, which does not exist in the submitted project.
+# Replace the two write.csv() lines below with:
+# write.csv(h1Data, "data/processed_data/practice_h1.csv", row.names = FALSE)
+# write.csv(h2Data, "data/processed_data/practice_h2.csv", row.names = FALSE)
+# The read.csv() paths below already point to the correct folder and can stay as they are.
+###  End of comment ###
 
 #save h1Data and h2Data without an extra row-number column
 write.csv(h1Data,"processed_data/practice_h1.csv",row.names=F)
